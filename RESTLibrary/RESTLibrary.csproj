@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>e4063d12-bf44-4973-af24-39805fcee1a2</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>  
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="nswag.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="nswag.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Apache.Ignite" Version="2.10.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.13" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.10.8" />
+    <PackageReference Include="NSwag.MSBuild" Version="13.10.8">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <Target Name="NSwag" BeforeTargets="AfterBuild" Condition="'$(TF_BUILD)'!='True'">
+    <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Core31) run nswag.json /variables:Configuration=$(Configuration),CSharpOutputPath=$(MSBuildThisFileDirectory)..\Client">
+      <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="NSwagOutput" />
+    </Exec>
+
+    <Message Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' == '0'" Importance="low" />
+    <Error Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' != '0'" />
+  </Target>
+
+
+</Project>

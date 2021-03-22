@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "IgniteServer": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

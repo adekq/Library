@@ -1,0 +1,1 @@
+(sleep 10; yes | /opt/ignite/apache-ignite/bin/control.sh --set-state ACTIVE) & /opt/ignite/apache-ignite/run.sh

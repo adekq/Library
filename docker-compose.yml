@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  ignite:
+    image: apacheignite/ignite:2.10.0    
+    volumes:
+      - /home/ignite/data
+      - ./:/home/docker-compose    
+    ports:
+      - "10800:10800"
+    command: [bash, -c, "/home/docker-compose/ignite-startup.sh"]
+    environment:
+      - IGNITE_QUIET=false
+      - IGNITE_WORK_DIR=/home/ignite/data
+      - CONFIG_URI=/home/docker-compose/ignite-server.xml
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.2
+  restlibrary:
+    image: ${DOCKER_REGISTRY-}restlibrary
+    build:
+      context: .
+      dockerfile: RESTLibrary/Dockerfile
+    depends_on:
+      - ignite
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.3
+networks:
+  app_net:
+    driver: bridge    
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+          gateway: 172.16.238.1

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RESTLibrary</name>
+    </assembly>
+    <members>
+        <member name="T:RESTLibrary.Persisters.SimpleInMemoryPersister">
+            <summary>
+            This class is a substitution to robust persisting layer like database.
+            Used for speeding up implementation.
+            </summary>
+        </member>
+    </members>
+</doc>
